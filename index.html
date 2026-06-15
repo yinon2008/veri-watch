@@ -1,510 +1,529 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>VERI — Authenticate any luxury watch in seconds</title>
-<meta name="description" content="AI-powered watch authentication, live market value, and a global stolen-watch registry. In your pocket.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VERI — Authenticate Any Luxury Watch with AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 <style>
-:root{
-  --bg:#080708;
-  --bg-warm:#0D0B09;
-  --panel:#100E0B;
-  --card:#16130D;
-  --card-2:#1C180F;
-  --gold:#D6B874;
-  --gold-hi:#F2E4BE;
-  --gold-deep:#9A8048;
-  --gold-line:rgba(214,184,116,.22);
-  --line:rgba(255,255,255,.085);
-  --line-2:rgba(255,255,255,.14);
-  --white:#FFFFFF;
-  --t:#F3F0E9;
-  --mut:rgba(243,240,233,.5);
-  --mut-2:rgba(243,240,233,.68);
-  --nav-h:64px;
-  --pad:clamp(20px,5vw,84px);
-  --ease:cubic-bezier(.2,.7,.2,1);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  background:var(--bg);color:var(--t);
-  font-family:'Inter',system-ui,sans-serif;font-weight:400;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;
-}
-::selection{background:var(--gold);color:#1a1206}
-a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:3px}
+  :root{
+    --bg:#0a0807; --bg-2:#100c0a;
+    --surface:#161210; --surface-2:#1c1714; --surface-3:#241d18;
+    --copper-deep:#7a2e12; --copper:#b8430f; --copper-bright:#e0743f; --copper-glow:#ff8a4c;
+    --grad-copper:linear-gradient(135deg,#8a3416 0%,#c2410c 42%,#e0743f 100%);
+    --grad-copper-soft:linear-gradient(135deg,#5a2410 0%,#a23a14 55%,#cf6738 100%);
+    --ink:#f5f1ee; --ink-70:rgba(245,241,238,.66); --ink-45:rgba(245,241,238,.45); --ink-25:rgba(245,241,238,.25);
+    --line:rgba(255,235,220,.08); --line-2:rgba(255,235,220,.14);
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    --serif:'Instrument Serif',Georgia,'Times New Roman',serif;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+  a{text-decoration:none;color:inherit}
+  img{display:block;max-width:100%}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .copper-text{background:var(--grad-copper);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 
-.mono{font-family:'JetBrains Mono',monospace;font-feature-settings:"tnum"}
-.eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;font-weight:500;color:var(--gold)}
-.gold-text{background:linear-gradient(135deg,var(--gold-hi),var(--gold) 45%,var(--gold-deep));-webkit-background-clip:text;background-clip:text;color:transparent}
+  body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-/* film grain + vignette */
-.grain{position:fixed;inset:0;z-index:900;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.vign{position:fixed;inset:0;z-index:899;pointer-events:none;
-  background:radial-gradient(120% 90% at 50% 0%,transparent 55%,rgba(0,0,0,.55) 100%)}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  .reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 
-/* ============ NAV ============ */
-.nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:100;display:flex;align-items:center;gap:16px;padding:0 18px}
-.nav-inner{flex:1;display:flex;align-items:center;gap:clamp(10px,2vw,28px);height:46px;padding:0 8px 0 18px;
-  background:rgba(16,14,11,.55);backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);
-  border:1px solid var(--gold-line);border-radius:9px;box-shadow:0 8px 30px rgba(0,0,0,.4)}
-.brand{display:flex;align-items:center;gap:5px;font-weight:800;letter-spacing:.05em;font-size:16px}
-.brand svg{width:26px;height:26px}
-.brand .reg{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mut);font-weight:400;margin-top:-3px}
-.nav-sep{width:1px;height:22px;background:var(--line-2)}
-.nav-links{display:flex;align-items:center;gap:clamp(14px,2vw,32px);flex:1;overflow:hidden}
-.nav-link{display:flex;align-items:baseline;gap:8px;font-size:12px;font-weight:600;letter-spacing:.06em;white-space:nowrap;color:var(--mut-2);transition:color .25s;position:relative}
-.nav-link .n{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);font-weight:400}
-.nav-link::after{content:"";position:absolute;left:0;bottom:-15px;height:1px;width:0;background:var(--gold);transition:width .3s var(--ease)}
-.nav-link:hover,.nav-link.active{color:var(--t)}
-.nav-link.active::after{width:100%}
-.nav-cta{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 17px;background:var(--white);color:#0a0a0a;border-radius:7px;font-weight:700;font-size:13px;white-space:nowrap;transition:transform .2s var(--ease),box-shadow .2s}
-.nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,255,255,.14)}
-.nav-cta svg{width:13px;height:13px}
-.burger{width:44px;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;background:none;border:none}
-.burger span{width:20px;height:2px;background:var(--t);transition:.3s}
-.menu-panel{position:fixed;inset:0;z-index:99;background:rgba(8,7,8,.98);backdrop-filter:blur(24px);display:flex;flex-direction:column;justify-content:center;gap:4px;padding:var(--pad);transform:translateY(-100%);transition:transform .55s var(--ease)}
-.menu-panel.open{transform:translateY(0)}
-.menu-panel a{font-size:clamp(34px,9vw,68px);font-weight:800;letter-spacing:-.02em;display:flex;align-items:baseline;gap:18px;padding:6px 0}
-.menu-panel a .n{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);font-weight:500}
-body.menu-open{overflow:hidden}
+  /* ── App Store badge (official-style) ── */
+  .appstore{display:inline-flex;align-items:center;gap:11px;background:#000;border:1px solid rgba(255,255,255,.22);
+    border-radius:13px;padding:9px 17px 9px 15px;transition:transform .25s,border-color .25s,box-shadow .25s}
+  .appstore:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.5);box-shadow:0 16px 34px -16px rgba(0,0,0,.8)}
+  .appstore svg{width:26px;height:26px;fill:#fff;flex:0 0 auto}
+  .appstore .as-txt{display:flex;flex-direction:column;line-height:1;text-align:left}
+  .appstore .as-small{font-size:10.5px;font-weight:500;color:#fff;letter-spacing:.02em;margin-bottom:3px}
+  .appstore .as-big{font-size:19px;font-weight:600;color:#fff;letter-spacing:-.01em}
+  .as-soon{font-size:12px;color:var(--ink-45);margin-top:11px}
 
-/* ============ HERO ============ */
-.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
-  padding:calc(var(--nav-h) + 30px) var(--pad) 96px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0;
-  background:
-    radial-gradient(60% 50% at 50% 42%, rgba(214,184,116,.10), transparent 70%),
-    radial-gradient(120% 80% at 50% 30%, #16130D 0%, var(--bg) 62%)}
-.hero-watch{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;pointer-events:none}
-.hero-watch svg{width:min(560px,82vw);height:auto;opacity:.55;filter:drop-shadow(0 50px 90px rgba(0,0,0,.8))}
-.hero-content{position:relative;z-index:2}
-.hero .eyebrow{display:block;margin-bottom:24px}
-.hero h1{font-size:clamp(78px,22vw,310px);font-weight:800;letter-spacing:-.045em;line-height:.8;
-  text-shadow:0 14px 70px rgba(0,0,0,.5)}
-.dot{display:inline-block;width:.1em;height:.1em;border-radius:50%;background:linear-gradient(135deg,var(--gold-hi),var(--gold-deep));vertical-align:baseline;margin-left:.03em;box-shadow:0 0 24px rgba(214,184,116,.6)}
-.hero-sub{margin:28px auto 0;max-width:450px;font-size:clamp(14px,1.6vw,17px);line-height:1.6;color:var(--mut-2);font-weight:400}
-.hero-actions{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2}
-.btn-app{display:inline-flex;align-items:center;gap:11px;height:56px;padding:0 26px;border-radius:10px;background:var(--white);color:#0a0a0a;font-weight:700;transition:transform .22s var(--ease),box-shadow .22s}
-.btn-app:hover{transform:translateY(-2px);box-shadow:0 16px 44px rgba(255,255,255,.14)}
-.btn-app svg{width:24px;height:24px}
-.btn-app .stack{display:flex;flex-direction:column;align-items:flex-start;line-height:1.05}
-.btn-app .stack small{font-size:10px;font-weight:500;opacity:.6;letter-spacing:.04em}
-.btn-app .stack b{font-size:18px;font-weight:700}
-.btn-ghost{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 24px;border-radius:10px;border:1px solid var(--gold-line);color:var(--t);font-weight:600;font-size:14px;transition:.25s var(--ease)}
-.btn-ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(214,184,116,.05)}
-.scroll-cue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:2;width:34px;height:34px;border:1px solid var(--gold-line);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold)}
-.scroll-cue svg{width:14px;height:14px;animation:bob 1.9s infinite}
-@keyframes bob{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
-.hero-tags{position:absolute;bottom:30px;left:0;right:0;display:flex;justify-content:space-between;padding:0 var(--pad);z-index:2}
-.tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--mut-2);border:1px solid var(--gold-line);border-radius:40px;padding:8px 16px;backdrop-filter:blur(6px)}
-.scanline{stroke:url(#gline);stroke-width:2;opacity:.95;filter:drop-shadow(0 0 9px rgba(214,184,116,.85))}
+  /* ── NAV ── */
+  nav{position:sticky;top:0;z-index:50;background:rgba(10,8,7,.55);backdrop-filter:blur(18px);border-bottom:1px solid transparent;transition:background .3s,border-color .3s}
+  nav.scrolled{background:rgba(10,8,7,.82);border-bottom-color:var(--line)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{font-weight:800;letter-spacing:.42em;font-size:18px;padding-left:.42em}
+  .nav-links{display:flex;gap:34px;font-size:14px;color:var(--ink-70);font-weight:500}
+  .nav-links a{position:relative;transition:color .2s}
+  .nav-links a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:1px;background:var(--copper-bright);transition:width .25s}
+  .nav-links a:hover{color:var(--ink)}.nav-links a:hover::after{width:100%}
+  .nav .appstore{padding:7px 14px 7px 12px;border-radius:11px}
+  .nav .appstore svg{width:22px;height:22px}.nav .appstore .as-big{font-size:15px}.nav .appstore .as-small{font-size:9px}
 
-/* hero load sequence */
-.pre{opacity:0;transform:translateY(30px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
-body.loaded .pre{opacity:1;transform:none}
-body.loaded .d1{transition-delay:.05s}body.loaded .d2{transition-delay:.18s}body.loaded .d3{transition-delay:.31s}
-body.loaded .d4{transition-delay:.44s}body.loaded .d5{transition-delay:.57s}
-.hero-watch{opacity:0;transform:scale(1.06);transition:opacity 1.4s var(--ease),transform 1.6s var(--ease)}
-body.loaded .hero-watch{opacity:1;transform:none}
+  /* ── HERO ── */
+  .hero{position:relative;text-align:center;padding:84px 0 0;overflow:hidden}
+  .badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;padding:7px 15px 7px 11px;border-radius:999px;border:1px solid var(--line-2);background:rgba(255,235,220,.03);font-size:12.5px;color:var(--ink-70);font-weight:500}
+  .badge .live{width:7px;height:7px;border-radius:50%;background:var(--copper-glow);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,138,76,.55)}70%{box-shadow:0 0 0 7px rgba(255,138,76,0)}100%{box-shadow:0 0 0 0 rgba(255,138,76,0)}}
+  .eyebrow{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--ink-70);margin-bottom:14px}
+  h1.hero-title{font-weight:800;font-size:clamp(46px,8.2vw,104px);line-height:.96;letter-spacing:-.03em}
+  h1.hero-title .l2{display:block}
+  .hero-sub{max-width:560px;margin:26px auto 32px;color:var(--ink-70);font-size:17px;line-height:1.7}
+  .hero-cta{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap}
+  .text-link{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;color:var(--ink);border-bottom:1px solid var(--line-2);padding-bottom:3px;transition:border-color .25s}
+  .text-link:hover{border-color:var(--copper-bright)}
+  .text-link .arrow{transition:transform .25s}.text-link:hover .arrow{transform:translateX(3px)}
 
-/* ============ MARQUEE ============ */
-.marquee{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-warm);overflow:hidden;padding:22px 0;position:relative}
-.marquee::before,.marquee::after{content:"";position:absolute;top:0;bottom:0;width:200px;z-index:2}
-.marquee::before{left:0;background:linear-gradient(90deg,var(--bg-warm) 40%,transparent)}
-.marquee::after{right:0;background:linear-gradient(270deg,var(--bg-warm),transparent)}
-.mq-label{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);z-index:3;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.22em;color:var(--gold)}
-.mq-track{display:flex;align-items:center;gap:54px;width:max-content;animation:mq 38s linear infinite;padding-left:260px}
-.marquee:hover .mq-track{animation-play-state:paused}
-.mq-track b{font-size:17px;font-weight:600;letter-spacing:.01em;color:var(--mut-2);white-space:nowrap;display:flex;align-items:center}
-.mq-track b::after{content:"";width:4px;height:4px;border-radius:50%;background:var(--gold-deep);margin-left:54px}
-.mq-track b:last-child::after{display:none}
-@keyframes mq{to{transform:translateX(-50%)}}
+  .hero-glow{position:absolute;left:50%;top:430px;transform:translateX(-50%);width:1300px;height:680px;pointer-events:none;z-index:0;
+    background:radial-gradient(closest-side at 38% 50%,rgba(226,116,63,.55),transparent 70%),radial-gradient(closest-side at 62% 46%,rgba(194,65,12,.55),transparent 70%),radial-gradient(closest-side at 50% 60%,rgba(255,138,76,.32),transparent 72%);
+    filter:blur(20px);animation:breathe 7s ease-in-out infinite}
+  @keyframes breathe{0%,100%{opacity:.85;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+  .hero-phone{position:relative;z-index:2;margin:56px auto 0;width:300px;transform:rotate(-7deg);animation:float 6s ease-in-out infinite;transform-style:preserve-3d;will-change:transform}
+  @keyframes float{0%,100%{transform:rotate(-7deg) translateY(0)}50%{transform:rotate(-7deg) translateY(-16px)}}
+  .phone-shell{border-radius:42px;padding:8px;background:linear-gradient(160deg,#2a2320,#0c0a09);box-shadow:0 50px 90px -30px rgba(0,0,0,.85),0 0 0 1px var(--line-2)}
+  .phone-shell img{border-radius:34px;width:100%}
+  .hero-fade{position:absolute;left:0;right:0;bottom:0;height:170px;z-index:3;background:linear-gradient(to bottom,transparent,var(--bg))}
+  .hero-spacer{height:96px}
 
-/* ============ SECTION SHELL ============ */
-section{position:relative}
-.sec-pad{padding:clamp(72px,11vw,148px) var(--pad)}
-.panel{background:var(--panel)}
-.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:clamp(42px,6vw,82px)}
-.sec-head .label{display:flex;align-items:baseline;gap:16px}
-.sec-head .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);font-weight:500}
-.sec-head h2{font-size:clamp(31px,5vw,66px);font-weight:800;letter-spacing:-.035em;line-height:1}
-.sec-head .meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mut)}
-.lede{max-width:520px;font-size:clamp(15px,1.7vw,19px);line-height:1.55;color:var(--mut-2)}
+  /* ── brand marquee ── */
+  .marquee{position:relative;z-index:4;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;overflow:hidden;margin-bottom:20px}
+  .marquee::before,.marquee::after{content:"";position:absolute;top:0;bottom:0;width:140px;z-index:2;pointer-events:none}
+  .marquee::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+  .marquee::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+  .marquee-track{display:flex;gap:56px;width:max-content;animation:scroll-x 40s linear infinite}
+  .marquee:hover .marquee-track{animation-play-state:paused}
+  .marquee-track span{font-family:var(--serif);font-size:23px;color:var(--ink-45);white-space:nowrap}
+  @keyframes scroll-x{to{transform:translateX(-50%)}}
 
-/* ============ STEPS ============ */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.step{background:var(--bg);padding:clamp(28px,3vw,46px);display:flex;flex-direction:column;gap:18px;min-height:312px;transition:background .35s}
-.step:hover{background:var(--card)}
-.step .idx{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold)}
-.step .vis{height:88px;display:flex;align-items:center}
-.step .vis svg{height:62px;width:auto}
-.step h3{font-size:23px;font-weight:700;letter-spacing:-.01em;margin-top:auto}
-.step p{font-size:14px;line-height:1.6;color:var(--mut-2)}
-.step .line{height:1px;background:linear-gradient(90deg,var(--gold),transparent);width:46px}
+  section{position:relative;z-index:4}
 
-/* ============ SPEC TABLE ============ */
-.spec-row{display:grid;grid-template-columns:1.1fr 2fr auto;gap:24px;align-items:center;padding:clamp(24px,3vw,36px) 0;border-top:1px solid var(--line)}
-.spec-row:last-child{border-bottom:1px solid var(--line)}
-.spec-row .k{font-size:clamp(20px,2.6vw,30px);font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:16px}
-.spec-row .k .dotnum{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);font-weight:500}
-.spec-row .d{font-size:15px;line-height:1.55;color:var(--mut-2);max-width:48ch}
-.spec-row .tag2{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-line);border-radius:40px;padding:7px 15px;white-space:nowrap}
+  /* ── EDITORIAL + feature cards ── */
+  .editorial{padding:60px 0 30px;display:grid;grid-template-columns:1.25fr 1fr;gap:50px;align-items:end}
+  .editorial h2{font-weight:800;font-size:clamp(38px,5.6vw,72px);line-height:1.02;letter-spacing:-.025em}
+  .editorial h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+  .editorial p{color:var(--ink-70);font-size:16px;line-height:1.8;max-width:340px;justify-self:end}
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:54px 0 30px;border-top:1px solid var(--line);margin-top:50px}
+  .feat{padding:28px 26px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,var(--surface),var(--bg));transition:transform .35s,border-color .35s,box-shadow .35s}
+  .feat:hover{transform:translateY(-6px);border-color:var(--line-2);box-shadow:0 30px 60px -30px rgba(226,116,63,.25)}
+  .feat h3{font-size:17px;font-weight:700;margin-bottom:12px;letter-spacing:-.01em}
+  .feat p{color:var(--ink-45);font-size:14px;line-height:1.7}
+  .feat .ico{width:44px;height:44px;border-radius:12px;background:var(--grad-copper-soft);display:flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:0 8px 20px -8px rgba(194,65,12,.6)}
+  .feat .ico svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 
-/* ============ SHOWCASE ============ */
-.show{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,6vw,96px);align-items:center}
-.show .copy h3{font-size:clamp(26px,4vw,48px);font-weight:800;letter-spacing:-.03em;line-height:1.02;margin-bottom:20px}
-.show .copy p{font-size:16px;line-height:1.62;color:var(--mut-2);max-width:42ch}
-.statline{display:flex;gap:42px;margin-top:38px;flex-wrap:wrap}
-.statline .s b{display:block;font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-.02em}
-.statline .s span{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-.phone-wrap{display:flex;justify-content:center;perspective:1400px}
-.phone{width:300px;max-width:78vw;aspect-ratio:9/19.2;background:#000;border-radius:44px;border:9px solid #1a1814;
-  box-shadow:0 50px 110px rgba(0,0,0,.7),0 0 0 1px rgba(214,184,116,.12),inset 0 0 0 1px rgba(255,255,255,.04);
-  position:relative;overflow:hidden;transform:rotateY(-9deg) rotateX(3deg);transition:transform .6s var(--ease)}
-.phone-wrap:hover .phone{transform:rotateY(0) rotateX(0)}
-.phone .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:106px;height:23px;background:#000;border-radius:14px;z-index:5}
-.phone-screen{position:absolute;inset:0;background:linear-gradient(180deg,#0c0a07,#000);padding:40px 18px 20px;display:flex;flex-direction:column;gap:14px}
-.ps-top{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mut);letter-spacing:.1em}
-.ps-watch{flex:1;border-radius:18px;background:#100E0A;border:1px solid var(--gold-line);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.ps-watch svg{width:60%}
-.ps-scan{position:absolute;left:0;right:0;height:30px;background:linear-gradient(180deg,transparent,rgba(214,184,116,.28),transparent);border-top:1.5px solid var(--gold);box-shadow:0 0 14px rgba(214,184,116,.5);animation:scan 2.8s var(--ease) infinite}
-@keyframes scan{0%{top:-8%}100%{top:96%}}
-.ps-badge{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:7px;background:rgba(214,184,116,.14);border:1px solid var(--gold);color:var(--gold-hi);font-size:11px;font-weight:600;padding:7px 14px;border-radius:40px;backdrop-filter:blur(4px)}
-.ps-badge svg{width:13px;height:13px}
-.ps-result{background:#100E0A;border:1px solid var(--gold-line);border-radius:16px;padding:15px;display:flex;flex-direction:column;gap:11px}
-.ps-result .ln{display:flex;justify-content:space-between;font-size:12px}
-.ps-result .ln span:first-child{color:var(--mut)}
-.ps-result .ln span:last-child{font-family:'JetBrains Mono',monospace;color:var(--t)}
-.ps-result .verdict{color:var(--gold)!important}
+  /* ── HOW IT WORKS ── */
+  .how{padding:96px 0 40px;text-align:center}
+  .how .eyebrow{font-size:20px}
+  .how h2{font-weight:800;font-size:clamp(34px,5vw,60px);letter-spacing:-.025em;line-height:1.04;margin-bottom:56px}
+  .how h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;text-align:left;position:relative}
+  .step{position:relative;padding-top:30px}
+  .step .n{font-family:var(--serif);font-size:64px;line-height:1;color:transparent;background:var(--grad-copper);-webkit-background-clip:text;background-clip:text;margin-bottom:14px}
+  .step h4{font-size:19px;font-weight:700;margin-bottom:10px;letter-spacing:-.015em}
+  .step p{color:var(--ink-45);font-size:14.5px;line-height:1.7;max-width:300px}
+  .step:not(:last-child)::before{content:"";position:absolute;top:48px;right:-15px;width:30px;height:1px;background:var(--line-2)}
 
-/* ============ PRICING ============ */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
-.plan{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 22px 24px;display:flex;flex-direction:column;gap:16px;position:relative;transition:border-color .3s,transform .3s,box-shadow .3s}
-.plan:hover{border-color:var(--gold-line);transform:translateY(-4px);box-shadow:0 24px 50px rgba(0,0,0,.5)}
-.plan.feat{border-color:var(--gold);background:linear-gradient(180deg,#1f1a10,var(--card));box-shadow:0 0 0 1px rgba(214,184,116,.25),0 30px 60px rgba(0,0,0,.5)}
-.plan .pop{position:absolute;top:-12px;left:22px;background:linear-gradient(95deg,var(--gold-hi),var(--gold) 55%,var(--gold-deep));color:#241a08;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;font-weight:500;padding:6px 12px;border-radius:40px;box-shadow:0 6px 18px rgba(214,184,116,.3)}
-.plan .pname{font-size:21px;font-weight:700;letter-spacing:-.01em}
-.plan .pdesc{font-size:12.5px;color:var(--mut);margin-top:-10px}
-.plan .price{font-size:36px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:baseline;gap:6px}
-.plan .price .per{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:var(--mut)}
-.plan ul{list-style:none;display:flex;flex-direction:column;gap:12px;flex:1}
-.plan li{display:flex;align-items:flex-start;gap:11px;font-size:13.5px;color:var(--mut-2);line-height:1.4}
-.plan li svg{width:15px;height:15px;flex:none;margin-top:1px;color:var(--gold)}
-.plan .pbtn{height:48px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;transition:.2s var(--ease)}
-.plan .pbtn.ghost{border:1px solid var(--gold-line);color:var(--t)}
-.plan .pbtn.ghost:hover{border-color:var(--gold);color:var(--gold)}
-.plan .pbtn.solid{background:var(--white);color:#0a0a0a}
-.plan .pbtn.solid:hover{filter:brightness(.93)}
-.plan .fine{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mut);text-align:center;line-height:1.4}
+  /* ── SHOWCASE (alternating premium rows) ── */
+  .showcase{padding:96px 0 40px;text-align:center}
+  .showcase .eyebrow{font-size:20px}
+  .showcase > .wrap > h2{font-weight:800;font-size:clamp(34px,5vw,60px);letter-spacing:-.025em;line-height:1.04;margin-bottom:10px}
+  .showcase > .wrap > h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+  .showcase > .wrap > .lead{color:var(--ink-70);max-width:520px;margin:0 auto 40px;font-size:16px}
+  .show-row{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding:64px 0;text-align:left}
+  .show-media{position:relative;display:flex;justify-content:center}
+  .show-media::before{content:"";position:absolute;width:440px;height:440px;border-radius:50%;z-index:0;
+    background:radial-gradient(closest-side,rgba(226,116,63,.30),transparent 72%);filter:blur(14px)}
+  .show-media .phone-shell{position:relative;z-index:1;width:288px}
+  .show-row.flip .show-media{order:2}
+  .tag{display:inline-block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:18px;
+    background:var(--grad-copper);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .show-text h3{font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1.06;letter-spacing:-.02em;margin-bottom:16px}
+  .show-text > p{color:var(--ink-70);font-size:16px;line-height:1.75;max-width:440px;margin-bottom:22px}
+  .blist{list-style:none;display:flex;flex-direction:column;gap:12px}
+  .blist li{display:flex;gap:12px;align-items:flex-start;color:var(--ink-70);font-size:14.5px;line-height:1.5}
+  .blist svg{width:18px;height:18px;flex:0 0 auto;margin-top:1px;stroke:var(--copper-bright);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-/* ============ CLOSING ============ */
-.close{text-align:center;padding:clamp(86px,13vw,176px) var(--pad);position:relative;overflow:hidden}
-.close h2{font-size:clamp(42px,9vw,124px);font-weight:800;letter-spacing:-.045em;line-height:.9}
-.close p{margin:24px auto 0;max-width:440px;color:var(--mut-2);font-size:16px;line-height:1.55}
-.close .hero-actions{margin-top:38px}
-.close-glow{position:absolute;left:50%;bottom:-46%;transform:translateX(-50%);width:130%;height:90%;background:radial-gradient(closest-side,rgba(214,184,116,.14),transparent);pointer-events:none}
+  /* ── STATS ── */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:50px 0 90px}
+  .stat{border:1px solid var(--line);border-radius:18px;padding:28px 24px;background:var(--surface);transition:border-color .3s}
+  .stat:hover{border-color:var(--line-2)}
+  .stat .num{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .stat .num em{font-family:var(--serif);font-style:italic;font-weight:400}
+  .stat .lbl{margin-top:10px;color:var(--ink-45);font-size:13px;line-height:1.5}
 
-/* ============ FOOTER ============ */
-footer{background:var(--bg);padding:54px var(--pad) 40px;border-top:1px solid var(--line)}
-.foot{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;flex-wrap:wrap}
-.foot .brand svg{width:30px;height:30px}
-.foot-links{display:flex;gap:40px;flex-wrap:wrap}
-.foot-col{display:flex;flex-direction:column;gap:12px}
-.foot-col .h{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
-.foot-col a{font-size:14px;color:var(--mut-2);transition:.2s}
-.foot-col a:hover{color:var(--t)}
-.foot-bottom{margin-top:46px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mut);flex-wrap:wrap;gap:10px}
+  /* ── PRICING ── */
+  .pricing{padding:96px 0 50px;text-align:center}
+  .pricing .eyebrow{font-size:20px}
+  .pricing h2{font-weight:800;font-size:clamp(34px,5vw,60px);letter-spacing:-.025em;line-height:1.04;margin-bottom:10px}
+  .pricing h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+  .pricing .lead{color:var(--ink-70);max-width:480px;margin:0 auto 50px;font-size:16px}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;text-align:left}
+  .plan{position:relative;border:1px solid var(--line);border-radius:22px;padding:34px 30px;background:var(--surface);transition:transform .35s,border-color .35s}
+  .plan:hover{transform:translateY(-6px)}
+  .plan.pop{border-color:rgba(226,116,63,.55);background:linear-gradient(180deg,var(--surface-2),var(--bg))}
+  .plan .ptag{position:absolute;top:-11px;left:30px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--grad-copper);padding:5px 12px;border-radius:999px}
+  .plan .pname{font-size:14px;font-weight:600;color:var(--ink-70);letter-spacing:.02em;margin-bottom:14px}
+  .plan .plimit{font-weight:800;font-size:30px;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+  .plan .plimit em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--copper-bright)}
+  .plan .psub{color:var(--ink-45);font-size:13px;margin-bottom:24px}
+  .plan ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+  .plan li{display:flex;gap:11px;color:var(--ink-70);font-size:14px;line-height:1.45}
+  .plan li svg{width:17px;height:17px;flex:0 0 auto;margin-top:1px;stroke:var(--copper-bright);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .plan .pbtn{display:block;text-align:center;font-weight:600;font-size:14px;padding:13px;border-radius:12px;border:1px solid var(--line-2);color:var(--ink);transition:all .25s}
+  .plan .pbtn:hover{border-color:var(--copper-bright)}
+  .plan.pop .pbtn{background:var(--grad-copper);border:none;color:#fff}
+  .plan.pop .pbtn:hover{filter:brightness(1.06)}
+  .pnote{color:var(--ink-45);font-size:13px;margin-top:28px}
 
-/* ============ REVEAL ============ */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+  /* ── CTA ── */
+  .cta-band{position:relative;border-radius:30px;overflow:hidden;margin:70px 0 100px;padding:80px 40px;text-align:center}
+  .cta-band::before{content:"";position:absolute;inset:0;z-index:0;
+    background:radial-gradient(120% 140% at 20% 0%,#e0743f 0%,transparent 55%),radial-gradient(120% 140% at 85% 100%,#7a2e12 0%,transparent 55%),linear-gradient(135deg,#c2410c,#5a2410)}
+  .cta-band::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(10,8,7,.10),rgba(10,8,7,.42))}
+  .cta-band > *{position:relative;z-index:2}
+  .cta-band h2{font-weight:800;font-size:clamp(34px,5vw,60px);line-height:1.02;letter-spacing:-.025em}
+  .cta-band h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+  .cta-band p{color:rgba(255,255,255,.85);margin:18px auto 30px;max-width:460px}
+  .cta-band .appstore{background:#000;border-color:rgba(255,255,255,.35)}
+  .cta-band .as-soon{color:rgba(255,255,255,.7)}
 
-/* ============ RESPONSIVE ============ */
-@media(max-width:980px){
-  .nav-links{display:none}
-  .steps{grid-template-columns:1fr}
-  .show{grid-template-columns:1fr;gap:48px}
-  .show .copy{order:2}
-  .plans{grid-template-columns:1fr}
-  .spec-row{grid-template-columns:1fr;gap:10px;align-items:flex-start}
-  .spec-row .tag2{justify-self:start}
-  .hero-tags .tag:nth-child(2){display:none}
-  .mq-label{display:none}.mq-track{padding-left:0}
-}
-@media(min-width:981px){.burger{display:none}}
-@media(max-width:560px){.plans{grid-template-columns:1fr}.hero-tags{display:none}.btn-app .stack b{font-size:16px}}
-@media(prefers-reduced-motion:reduce){
-  *{animation:none!important;scroll-behavior:auto}
-  .reveal,.pre,.hero-watch{opacity:1!important;transform:none!important;transition:none!important}
-}
+  /* ── FOOTER ── */
+  footer{border-top:1px solid var(--line);padding:50px 0 60px}
+  .foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+  .foot-links{display:flex;gap:28px;font-size:14px;color:var(--ink-45)}
+  .foot-links a:hover{color:var(--ink)}
+  .disclaimer{color:var(--ink-25);font-size:12px;margin-top:24px;line-height:1.6}
+
+  @media(max-width:860px){
+    .nav-links{display:none}
+    .editorial{grid-template-columns:1fr;gap:24px;align-items:start}.editorial p{justify-self:start}
+    .features{grid-template-columns:1fr;gap:16px}
+    .steps{grid-template-columns:1fr;gap:40px}.step:not(:last-child)::before{display:none}
+    .show-row{grid-template-columns:1fr;gap:36px;text-align:center;padding:50px 0}
+    .show-row.flip .show-media{order:0}
+    .show-text > p,.blist{margin-left:auto;margin-right:auto}
+    .blist{max-width:340px;text-align:left}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .plans{grid-template-columns:1fr;max-width:420px;margin:0 auto}
+  }
+  @media(max-width:520px){.stats{grid-template-columns:1fr}.hero-phone{width:250px}.wrap{padding:0 20px}}
 </style>
 </head>
 <body>
-<div class="grain"></div><div class="vign"></div>
 
-<!-- SVG defs (gold gradients shared) -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <linearGradient id="gline" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F2E4BE"/><stop offset="1" stop-color="#9A8048"/></linearGradient>
-  <linearGradient id="gmark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2E4BE"/><stop offset="1" stop-color="#9A8048"/></linearGradient>
-</defs></svg>
-
-<!-- ===== NAV ===== -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="#top" class="brand" aria-label="VERI home">VERI<span class="reg">®</span></a>
-    <span class="nav-sep"></span>
-    <div class="nav-links">
-      <a class="nav-link" href="#how"><span class="n">1.0</span> HOW IT WORKS</a>
-      <a class="nav-link" href="#features"><span class="n">2.0</span> CAPABILITIES</a>
-      <a class="nav-link" href="#pricing"><span class="n">3.0</span> PRICING</a>
-      <a class="nav-link" href="#get"><span class="n">4.0</span> DOWNLOAD</a>
-    </div>
-    <a class="nav-cta" href="#get">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#0a0a0a" stroke-width="2.4" stroke-linecap="round"/></svg>
-      Get the App
-    </a>
-  </div>
-  <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
-</nav>
-<div class="menu-panel" id="menu">
-  <a href="#how"><span class="n">1.0</span> How it works</a>
-  <a href="#features"><span class="n">2.0</span> Capabilities</a>
-  <a href="#pricing"><span class="n">3.0</span> Pricing</a>
-  <a href="#get"><span class="n">4.0</span> Download</a>
-</div>
-
-<!-- ===== HERO ===== -->
-<header class="hero" id="top">
-  <div class="hero-bg"></div>
-  <div class="hero-watch" aria-hidden="true">
-    <svg viewBox="0 0 400 540" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="case" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a362d"/><stop offset=".5" stop-color="#1b1813"/><stop offset="1" stop-color="#0c0b08"/></linearGradient>
-        <radialGradient id="crystal" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="rgba(255,255,255,.10)"/><stop offset="40%" stop-color="rgba(255,255,255,.02)"/><stop offset="100%" stop-color="rgba(0,0,0,0)"/></radialGradient>
-        <clipPath id="caseClip"><rect x="92" y="124" width="216" height="292" rx="70"/></clipPath>
-      </defs>
-      <path d="M150 44 Q200 12 250 44 L244 138 H156 Z" fill="#15130E"/>
-      <path d="M156 402 H244 L250 494 Q200 524 150 494 Z" fill="#15130E"/>
-      <rect x="92" y="124" width="216" height="292" rx="70" fill="url(#case)" stroke="#4a4538" stroke-width="2"/>
-      <rect x="108" y="140" width="184" height="260" rx="58" fill="#0a0907" stroke="#2a2620" stroke-width="1.5"/>
-      <rect x="304" y="252" width="22" height="36" rx="5" fill="#2a2620"/>
-      <g clip-path="url(#caseClip)" stroke="#3a362c" stroke-width="1.3" fill="none">
-        <circle cx="200" cy="208" r="48"/><circle cx="200" cy="208" r="31"/>
-        <circle cx="156" cy="312" r="42"/><circle cx="156" cy="312" r="27"/>
-        <circle cx="256" cy="322" r="30"/>
-        <path d="M118 168 L282 372 M282 168 L118 372"/>
-      </g>
-      <!-- gold details -->
-      <g clip-path="url(#caseClip)">
-        <circle cx="200" cy="208" r="6" fill="url(#gmark)"/>
-        <circle cx="156" cy="312" r="5" fill="#9A8048"/>
-        <g stroke="url(#gmark)" stroke-width="2.4" stroke-linecap="round"><line x1="200" y1="208" x2="200" y2="166"/><line x1="200" y1="208" x2="232" y2="226"/></g>
-        <g fill="#9A8048"><rect x="197" y="138" width="6" height="14" rx="2"/><rect x="197" y="264" width="6" height="14" rx="2"/></g>
-      </g>
-      <rect x="108" y="140" width="184" height="260" rx="58" fill="url(#crystal)"/>
-      <g clip-path="url(#caseClip)">
-        <line class="scanline" x1="92" x2="308"><animate attributeName="y1" from="140" to="296" dur="3.6s" repeatCount="indefinite"/><animate attributeName="y2" from="140" to="296" dur="3.6s" repeatCount="indefinite"/></line>
-      </g>
-    </svg>
-  </div>
-
-  <div class="hero-content">
-    <span class="eyebrow pre d1">AI Watch Authentication</span>
-    <h1 class="pre d2">VERI<span class="dot"></span></h1>
-    <p class="hero-sub pre d3">Authenticate any luxury watch in seconds. AI-powered verification, live market value, and a global stolen-watch registry — in your pocket.</p>
-    <div class="hero-actions pre d4">
-      <a class="btn-app" href="#get" data-appstore>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2 1.6-2.9 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.2 2-1.4 2.4-.4 5.9 1 7.8.6.9 1.4 2 2.3 1.9.9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2-.1 0-1.9-.7-1.9-2.9zM14.6 6.3c.5-.6.9-1.5.8-2.3-.8 0-1.7.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.7-.4 2.2-1z"/></svg>
-        <span class="stack"><small>Download on the</small><b>App Store</b></span>
+  <!-- NAV -->
+  <nav id="nav">
+    <div class="wrap nav-inner">
+      <div class="logo">VERI</div>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#screens">Features</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <!-- TODO: replace href="#" with the App Store URL once Apple approves the app -->
+      <a href="#" class="appstore" aria-label="Download on the App Store">
+        <svg viewBox="0 0 24 24"><path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.88 2.65 3.22 2.6 1.29-.05 1.78-.83 3.34-.83 1.56 0 2 .83 3.37.81 1.39-.03 2.27-1.27 3.12-2.53.98-1.45 1.39-2.85 1.41-2.92-.03-.01-2.71-1.04-2.74-4.14M14.56 4.6c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.66.76-1.23 1.98-1.08 3.15 1.14.09 2.3-.58 3.01-1.44"/></svg>
+        <span class="as-txt"><span class="as-small">Download on the</span><span class="as-big">App Store</span></span>
       </a>
-      <a class="btn-ghost" href="#how">See how it works</a>
     </div>
-  </div>
+  </nav>
 
-  <div class="hero-tags pre d5">
-    <span class="tag">AI VISION</span><span class="tag">HOROLOGY</span><span class="tag">TRUST</span>
-  </div>
-  <a href="#how" class="scroll-cue pre d5" aria-label="Scroll down"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M6 13l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-</header>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-glow"></div>
+    <div class="wrap">
+      <div class="badge reveal in"><span class="live"></span> Powered by Claude Vision AI</div>
+      <p class="eyebrow reveal in d1">Stop guessing. Start verifying.</p>
+      <h1 class="hero-title reveal in d1">
+        Authenticate,
+        <span class="l2">Not <span class="copper-text">Guess.</span></span>
+      </h1>
+      <p class="hero-sub reveal in d2">
+        Let AI analyse your luxury watch against thousands of references —
+        authenticity, market value and stolen-status, right from your phone.
+      </p>
+      <div class="hero-cta reveal in d3">
+        <!-- TODO: replace href="#" with the App Store URL once Apple approves the app -->
+        <a href="#" class="appstore" aria-label="Download on the App Store">
+          <svg viewBox="0 0 24 24"><path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.88 2.65 3.22 2.6 1.29-.05 1.78-.83 3.34-.83 1.56 0 2 .83 3.37.81 1.39-.03 2.27-1.27 3.12-2.53.98-1.45 1.39-2.85 1.41-2.92-.03-.01-2.71-1.04-2.74-4.14M14.56 4.6c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.66.76-1.23 1.98-1.08 3.15 1.14.09 2.3-.58 3.01-1.44"/></svg>
+          <span class="as-txt"><span class="as-small">Download on the</span><span class="as-big">App Store</span></span>
+        </a>
+        <a href="#how" class="text-link">See how it works <span class="arrow">→</span></a>
+      </div>
+      <p class="as-soon reveal in d4">Coming soon to the App Store</p>
 
-<!-- ===== MARQUEE ===== -->
-<div class="marquee" aria-label="References recognized">
-  <span class="mq-label">REFERENCE LIBRARY</span>
-  <div class="mq-track">
-    <b>Rolex</b><b>Patek Philippe</b><b>Audemars Piguet</b><b>Omega</b><b>Cartier</b><b>Vacheron Constantin</b><b>Richard Mille</b><b>A. Lange &amp; Söhne</b><b>Tudor</b><b>IWC</b><b>Jaeger-LeCoultre</b>
-    <b>Rolex</b><b>Patek Philippe</b><b>Audemars Piguet</b><b>Omega</b><b>Cartier</b><b>Vacheron Constantin</b><b>Richard Mille</b><b>A. Lange &amp; Söhne</b><b>Tudor</b><b>IWC</b><b>Jaeger-LeCoultre</b>
-  </div>
-</div>
-
-<!-- ===== 1.0 HOW IT WORKS ===== -->
-<section class="sec-pad" id="how">
-  <div class="sec-head reveal"><div class="label"><span class="num">1.0</span><h2>How it works</h2></div><span class="meta">PROCESS / 03 STEPS</span></div>
-  <div class="steps reveal">
-    <div class="step"><span class="idx">01</span><div class="line"></div>
-      <div class="vis"><svg viewBox="0 0 80 80" fill="none"><rect x="14" y="8" width="52" height="64" rx="8" stroke="url(#gmark)" stroke-width="2.2"/><circle cx="40" cy="36" r="14" stroke="#777063" stroke-width="2"/><path d="M40 26v20M30 36h20" stroke="#777063" stroke-width="2"/><rect x="22" y="58" width="36" height="6" rx="3" fill="url(#gmark)"/></svg></div>
-      <h3>Scan</h3><p>Point your camera at the dial, caseback, movement, and serial. VERI captures the detail that matters.</p></div>
-    <div class="step"><span class="idx">02</span><div class="line"></div>
-      <div class="vis"><svg viewBox="0 0 80 80" fill="none"><circle cx="40" cy="40" r="30" stroke="#777063" stroke-width="2"/><path d="M28 41l8 8 16-18" stroke="url(#gmark)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="40" cy="40" r="36" stroke="#3a362c" stroke-width="2" stroke-dasharray="4 6"/></svg></div>
-      <h3>Verify</h3><p>Vision models compare against reference data — proportions, engraving, lume, finishing — and flag anything off.</p></div>
-    <div class="step"><span class="idx">03</span><div class="line"></div>
-      <div class="vis"><svg viewBox="0 0 80 80" fill="none"><rect x="16" y="12" width="48" height="56" rx="6" stroke="#777063" stroke-width="2"/><path d="M26 28h28M26 38h28M26 48h18" stroke="#777063" stroke-width="2" stroke-linecap="round"/><circle cx="58" cy="56" r="14" fill="#0a0907" stroke="url(#gmark)" stroke-width="2.2"/><path d="M52 56l4 4 8-8" stroke="url(#gmark)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h3>Report</h3><p>Get a confidence verdict, live market value, and a registry check — a shareable record in seconds.</p></div>
-  </div>
-</section>
-
-<!-- ===== 2.0 CAPABILITIES ===== -->
-<section class="sec-pad panel" id="features">
-  <div class="sec-head reveal"><div class="label"><span class="num">2.0</span><h2>Capabilities</h2></div><span class="meta">VERI — 04</span></div>
-  <div class="reveal">
-    <div class="spec-row"><div class="k"><span class="dotnum">A.</span>AI authentication</div><div class="d">Multi-angle vision analysis trained on reference catalogues. Detects mismatched fonts, wrong lume, swapped movements, and re-finished cases.</div><span class="tag2">Vision Model</span></div>
-    <div class="spec-row"><div class="k"><span class="dotnum">B.</span>Live market value</div><div class="d">Real-time pricing pulled from active Chrono24 listings, so you know what a piece is worth the moment you check it.</div><span class="tag2">Chrono24</span></div>
-    <div class="spec-row"><div class="k"><span class="dotnum">C.</span>Stolen-watch registry</div><div class="d">Every serial is checked against a global registry. Report a theft and protect the next buyer in the chain.</div><span class="tag2">Global DB</span></div>
-    <div class="spec-row"><div class="k"><span class="dotnum">D.</span>Shareable records</div><div class="d">Export a clean verification report — verdict, value, and timestamp — to send to a buyer, dealer, or insurer.</div><span class="tag2">Export</span></div>
-  </div>
-</section>
-
-<!-- ===== SHOWCASE ===== -->
-<section class="sec-pad">
-  <div class="show reveal">
-    <div class="copy">
-      <span class="eyebrow" style="display:block;margin-bottom:18px">In your pocket</span>
-      <h3>A second opinion that fits in your pocket.</h3>
-      <p>Before you buy, sell, or trade — run a check. VERI gives collectors and dealers a fast, defensible read on authenticity and value, without a trip to a watchmaker.</p>
-      <div class="statline">
-        <div class="s"><b class="gold-text" data-count="15" data-suffix="s" data-prefix="~">~15s</b><span>Per check</span></div>
-        <div class="s"><b>iOS 17+</b><span>Native app</span></div>
-        <div class="s"><b class="gold-text" data-count="4">4</b><span>Verification angles</span></div>
+      <div class="hero-phone" id="heroPhone">
+        <div class="phone-shell"><img src="assets/screen-verify.png" alt="VERI guided capture sequence" /></div>
       </div>
     </div>
-    <div class="phone-wrap">
-      <div class="phone"><div class="notch"></div>
-        <div class="phone-screen">
-          <div class="ps-top"><span>VERI</span><span>SCANNING…</span></div>
-          <div class="ps-watch">
-            <svg viewBox="0 0 200 260" fill="none">
-              <rect x="46" y="50" width="108" height="152" rx="36" fill="#15130E" stroke="#4a4538" stroke-width="2"/>
-              <rect x="56" y="60" width="88" height="132" rx="28" fill="#0a0907" stroke="#2a2620" stroke-width="1.2"/>
-              <g stroke="#3a362c" stroke-width="1.1" fill="none"><circle cx="100" cy="108" r="26"/><path d="M70 80 L130 188 M130 80 L70 188"/></g>
-              <circle cx="100" cy="108" r="4" fill="url(#gmark)"/>
-              <line x1="100" y1="108" x2="100" y2="84" stroke="url(#gmark)" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            <div class="ps-scan"></div>
-            <div class="ps-badge"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Authenticated</div>
-          </div>
-          <div class="ps-result">
-            <div class="ln"><span>Model</span><span>Submariner 124060</span></div>
-            <div class="ln"><span>Confidence</span><span class="verdict">98.2%</span></div>
-            <div class="ln"><span>Market value</span><span>$11,400</span></div>
-            <div class="ln"><span>Registry</span><span class="verdict">Clear</span></div>
-          </div>
+    <div class="hero-fade"></div>
+  </header>
+
+  <div class="hero-spacer"></div>
+
+  <!-- BRAND MARQUEE -->
+  <div class="marquee reveal">
+    <div class="marquee-track">
+      <span>Rolex</span><span>Audemars Piguet</span><span>Patek Philippe</span><span>Omega</span><span>Cartier</span><span>Panerai</span><span>IWC</span><span>Jaeger-LeCoultre</span><span>Hublot</span><span>Breitling</span><span>TAG Heuer</span><span>A. Lange &amp; Söhne</span><span>Richard Mille</span><span>Vacheron Constantin</span><span>Chopard</span><span>Tudor</span><span>Grand Seiko</span><span>Blancpain</span>
+      <span>Rolex</span><span>Audemars Piguet</span><span>Patek Philippe</span><span>Omega</span><span>Cartier</span><span>Panerai</span><span>IWC</span><span>Jaeger-LeCoultre</span><span>Hublot</span><span>Breitling</span><span>TAG Heuer</span><span>A. Lange &amp; Söhne</span><span>Richard Mille</span><span>Vacheron Constantin</span><span>Chopard</span><span>Tudor</span><span>Grand Seiko</span><span>Blancpain</span>
+    </div>
+  </div>
+
+  <!-- EDITORIAL + FEATURE CARDS -->
+  <section class="wrap">
+    <div class="editorial">
+      <h2 class="reveal">Designed to Catch What<br>the Eye <em>Misses</em></h2>
+      <p class="reveal d1">
+        Built for collectors, dealers and first-time buyers who want certainty
+        before they pay. Real analysis, instant answers, no appointment required.
+      </p>
+    </div>
+
+    <div class="features">
+      <div class="feat reveal">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>AI Authentication</h3>
+        <p>Choose a brand, then capture six guided angles. Claude Vision grades the watch and returns a verification result.</p>
+      </div>
+      <div class="feat reveal d1">
+        <div class="ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+        <h3>Reference Lookup</h3>
+        <p>Search by serial or scan a QR code against a secure database for specs, market value and stolen-watch status.</p>
+      </div>
+      <div class="feat reveal d2">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+        <h3>Live Market Pulse</h3>
+        <p>Real luxury-watch listings from Chrono24, filtered and sorted by brand, price and condition — updated live.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="how wrap">
+    <p class="eyebrow reveal">Three steps to certainty</p>
+    <h2 class="reveal d1">How It <em>Works</em></h2>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="n">01</div>
+        <h4>Capture six angles</h4>
+        <p>Follow the guided sequence — dial, crown, caseback, movement, bracelet and clasp — and add the reference number.</p>
+      </div>
+      <div class="step reveal d1">
+        <div class="n">02</div>
+        <h4>AI analyses the details</h4>
+        <p>Claude Vision compares every angle against thousands of authentic references to assess the watch.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="n">03</div>
+        <h4>Get your result</h4>
+        <p>Receive a verification result, plus market value and full specs through lookup and the expert AI chat.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOWCASE — alternating rows -->
+  <section id="screens" class="showcase">
+    <div class="wrap">
+      <p class="eyebrow reveal">Five tools, one app</p>
+      <h2 class="reveal d1">Everything You Need to <em>Verify</em></h2>
+      <p class="lead reveal d2">Authentication, lookup, an expert AI chat, a live market and your collection — in one place.</p>
+    </div>
+
+    <div class="wrap">
+      <!-- Verify -->
+      <div class="show-row reveal">
+        <div class="show-media"><div class="phone-shell"><img src="assets/screen-brands.png" alt="Select a brand to authenticate" /></div></div>
+        <div class="show-text">
+          <span class="tag">Verify</span>
+          <h3>Authenticate in a guided flow</h3>
+          <p>Pick from supported luxury brands, then move through a six-angle capture sequence built for accurate AI analysis.</p>
+          <ul class="blist">
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Dial, crown, caseback, movement, bracelet &amp; clasp</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Add a serial or reference number for context</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Powered by Claude Vision</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Lookup -->
+      <div class="show-row flip reveal">
+        <div class="show-media"><div class="phone-shell"><img src="assets/screen-lookup.png" alt="Identify any watch by reference" /></div></div>
+        <div class="show-text">
+          <span class="tag">Lookup</span>
+          <h3>Identify any watch instantly</h3>
+          <p>Enter a serial or reference, or scan a QR code, to search a secure database for specs, value and history.</p>
+          <ul class="blist">
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Technical specs &amp; live market value</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Built-in stolen-watch check</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Filter by manufacturer</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- AI Chat -->
+      <div class="show-row reveal">
+        <div class="show-media"><div class="phone-shell"><img src="assets/screen-chat.png" alt="Expert AI watch chat" /></div></div>
+        <div class="show-text">
+          <span class="tag">AI Chat</span>
+          <h3>An expert in your pocket</h3>
+          <p>Ask about value, investment, spotting fakes and watch history. Attach a photo for analysis or start from a suggested question.</p>
+          <ul class="blist">
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Conversational answers powered by Claude</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Attach a photo for instant analysis</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Ready-made starter questions</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Market -->
+      <div class="show-row flip reveal">
+        <div class="show-media"><div class="phone-shell"><img src="assets/screen-market.png" alt="Live market pulse" /></div></div>
+        <div class="show-text">
+          <span class="tag">Market</span>
+          <h3>A live market pulse</h3>
+          <p>Browse real luxury-watch listings pulled from Chrono24, with sorting and filtering so you always know the going rate.</p>
+          <ul class="blist">
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Live listings updated in real time</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Sort by price, filter by brand</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Location &amp; condition at a glance</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Profile -->
+      <div class="show-row reveal">
+        <div class="show-media"><div class="phone-shell"><img src="assets/screen-profile.png" alt="Your profile and achievements" /></div></div>
+        <div class="show-text">
+          <span class="tag">Profile</span>
+          <h3>Your account &amp; progress</h3>
+          <p>Sign in with Apple or Google, track your plan and credits, unlock achievements and report a stolen watch.</p>
+          <ul class="blist">
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Sign in with Apple or Google</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Subscription &amp; credit status</li>
+            <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Achievements &amp; stolen-watch reporting</li>
+          </ul>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== 3.0 PRICING ===== -->
-<section class="sec-pad panel" id="pricing">
-  <div class="sec-head reveal"><div class="label"><span class="num">3.0</span><h2>Choose your plan</h2></div><span class="meta">PRICING / 03 TIERS</span></div>
-  <div class="plans reveal">
-    <div class="plan">
-      <div class="pname">Single Check</div><div class="pdesc">Perfect for one purchase</div><div class="price">$2.99</div>
-      <ul>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>1 full authentication check</li>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Live market value</li>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Shareable report</li>
-      </ul>
-      <a class="pbtn ghost" href="#get" data-appstore>Buy one check</a>
+  <!-- STATS (factual) -->
+  <section class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><div class="num"><span data-count="18">0</span></div><div class="lbl">Luxury brands supported</div></div>
+      <div class="stat reveal d1"><div class="num"><span data-count="6">0</span></div><div class="lbl">Guided capture angles per watch</div></div>
+      <div class="stat reveal d2"><div class="num"><span data-count="5">0</span></div><div class="lbl">Tools in a single app</div></div>
+      <div class="stat reveal d3"><div class="num">Live</div><div class="lbl">Market data from Chrono24</div></div>
     </div>
-    <div class="plan feat">
-      <span class="pop">MOST POPULAR</span>
-      <div class="pname">Enthusiast</div><div class="pdesc">For serious collectors</div><div class="price">$9.99<span class="per">/ mo</span></div>
-      <ul>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>20 checks per month</li>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited AI messages</li>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Market price alerts</li>
-      </ul>
-      <a class="pbtn solid" href="#get" data-appstore>Start Enthusiast</a>
-      <div class="fine">$9.99/mo · Auto-renews · Cancel anytime</div>
-    </div>
-    <div class="plan">
-      <div class="pname">Commercial</div><div class="pdesc">For dealers &amp; shops</div><div class="price">$49.99<span class="per">/ mo</span></div>
-      <ul>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited checks</li>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Unlimited AI</li>
-        <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Priority support</li>
-      </ul>
-      <a class="pbtn ghost" href="#get" data-appstore>Start Commercial</a>
-      <div class="fine">$49.99/mo · Auto-renews · Cancel anytime</div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== 4.0 CLOSING ===== -->
-<section class="close" id="get">
-  <div class="close-glow"></div>
-  <div class="reveal">
-    <span class="eyebrow">4.0 — Download</span>
-    <h2 style="margin-top:18px">Know what's<br>on your wrist<span class="dot"></span></h2>
-    <p>Free to download. Your first check is on us.</p>
-    <div class="hero-actions">
-      <a class="btn-app" href="#" data-appstore>
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.6c0-2 1.6-2.9 1.7-3-1-1.4-2.4-1.6-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.2 2-1.4 2.4-.4 5.9 1 7.8.6.9 1.4 2 2.3 1.9.9 0 1.3-.6 2.4-.6 1.1 0 1.4.6 2.4.6 1 0 1.6-.9 2.2-1.8.7-1 1-2 1-2-.1 0-1.9-.7-1.9-2.9zM14.6 6.3c.5-.6.9-1.5.8-2.3-.8 0-1.7.5-2.2 1.1-.5.5-.9 1.4-.8 2.2.8.1 1.7-.4 2.2-1z"/></svg>
-        <span class="stack"><small>Download on the</small><b>App Store</b></span>
+  <!-- PRICING (factual model) -->
+  <section id="pricing" class="pricing wrap">
+    <p class="eyebrow reveal">Simple, flexible plans</p>
+    <h2 class="reveal d1">Start <em>Free</em></h2>
+    <p class="lead reveal d2">Try it at no cost, then upgrade when you need more checks. Credit packs available any time.</p>
+
+    <div class="plans">
+      <div class="plan reveal">
+        <div class="pname">Free</div>
+        <div class="plimit">1 <em>check</em></div>
+        <div class="psub">+ 3 AI chat messages</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> One AI authentication</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Reference lookup &amp; market access</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> A taste of the expert AI chat</li>
+        </ul>
+        <a href="#" class="pbtn">Get started</a>
+      </div>
+
+      <div class="plan pop reveal d1">
+        <div class="ptag">Most popular</div>
+        <div class="pname">Enthusiast</div>
+        <div class="plimit">20 <em>/ month</em></div>
+        <div class="psub">Authentication checks monthly</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> 20 AI authentications every month</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Full expert AI chat access</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Everything in Free</li>
+        </ul>
+        <a href="#" class="pbtn">Choose Enthusiast</a>
+      </div>
+
+      <div class="plan reveal d2">
+        <div class="pname">Commercial</div>
+        <div class="plimit">Unlimited</div>
+        <div class="psub">For dealers &amp; shops</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Unlimited AI authentications</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Full access to every tool</li>
+          <li><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg> Everything in Enthusiast</li>
+        </ul>
+        <a href="#" class="pbtn">Choose Commercial</a>
+      </div>
+    </div>
+    <p class="pnote reveal">One-time credit packs are also available in-app.</p>
+  </section>
+
+  <!-- CTA -->
+  <section class="wrap">
+    <div class="cta-band reveal">
+      <h2>Buy With <em>Confidence.</em><br>Authenticate First.</h2>
+      <p>Your first check is free — no watchmaker, no waiting room, no doubt.</p>
+      <!-- TODO: replace href="#" with the App Store URL once Apple approves the app -->
+      <a href="#" class="appstore" aria-label="Download on the App Store">
+        <svg viewBox="0 0 24 24"><path d="M17.05 12.04c-.03-2.6 2.12-3.85 2.22-3.91-1.21-1.77-3.09-2.01-3.76-2.04-1.6-.16-3.12.94-3.93.94-.81 0-2.06-.92-3.39-.89-1.74.03-3.35 1.01-4.25 2.57-1.81 3.14-.46 7.79 1.3 10.34.86 1.25 1.88 2.65 3.22 2.6 1.29-.05 1.78-.83 3.34-.83 1.56 0 2 .83 3.37.81 1.39-.03 2.27-1.27 3.12-2.53.98-1.45 1.39-2.85 1.41-2.92-.03-.01-2.71-1.04-2.74-4.14M14.56 4.6c.71-.86 1.19-2.06 1.06-3.25-1.02.04-2.26.68-2.99 1.54-.66.76-1.23 1.98-1.08 3.15 1.14.09 2.3-.58 3.01-1.44"/></svg>
+        <span class="as-txt"><span class="as-small">Download on the</span><span class="as-big">App Store</span></span>
       </a>
+      <p class="as-soon">Coming soon to the App Store</p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div class="foot">
-    <a href="#top" class="brand">VERI<span class="reg">®</span></a>
-    <div class="foot-links">
-      <div class="foot-col"><span class="h">Product</span><a href="#how">How it works</a><a href="#features">Capabilities</a><a href="#pricing">Pricing</a></div>
-      <div class="foot-col"><span class="h">Company</span><a href="#">About</a><a href="#">Contact</a><a href="#">Press</a></div>
-      <div class="foot-col"><span class="h">Legal</span><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Restore purchases</a></div>
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-inner">
+        <div class="logo">VERI</div>
+        <div class="foot-links">
+          <a href="#how">How it works</a>
+          <a href="#screens">Features</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+      </div>
+      <p class="disclaimer">
+        Powered by Claude AI · Results are advisory only · Consult a certified watchmaker before any high-value purchase.
+        © 2026 VERI. All rights reserved.
+      </p>
     </div>
-  </div>
-  <div class="foot-bottom"><span>© 2026 VERI. All rights reserved.</span><span>BUILT FOR COLLECTORS — JERUSALEM</span></div>
-</footer>
+  </footer>
 
 <script>
-const burger=document.getElementById('burger'),menu=document.getElementById('menu');
-burger.addEventListener('click',()=>{const o=menu.classList.toggle('open');document.body.classList.toggle('menu-open',o);});
-menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{menu.classList.remove('open');document.body.classList.remove('menu-open');}));
+  const nav=document.getElementById('nav');
+  addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>20));
 
-window.addEventListener('load',()=>requestAnimationFrame(()=>document.body.classList.add('loaded')));
-setTimeout(()=>document.body.classList.add('loaded'),400);
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.14,rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal:not(.in)').forEach(el=>io.observe(el));
 
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  const counters=document.querySelectorAll('[data-count]');
+  const co=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el=e.target, end=+el.dataset.count, dur=1300, t0=performance.now();
+      const tick=(t)=>{ const p=Math.min(1,(t-t0)/dur), eased=1-Math.pow(1-p,3);
+        el.textContent=Math.round(end*eased); if(p<1) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick); co.unobserve(el);
+    });
+  },{threshold:.6});
+  counters.forEach(c=>co.observe(c));
 
-const links=[...document.querySelectorAll('.nav-link')];
-const map=links.map(l=>({l,sec:document.querySelector(l.getAttribute('href'))}));
-const sio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(x=>x.classList.remove('active'));const m=map.find(m=>m.sec===e.target);if(m)m.l.classList.add('active');}}),{rootMargin:'-45% 0px -50% 0px'});
-map.forEach(m=>m.sec&&sio.observe(m.sec));
-
-// count-up
-const cio=new IntersectionObserver(es=>es.forEach(e=>{
-  if(!e.isIntersecting)return; cio.unobserve(e.target);
-  const el=e.target,end=+el.dataset.count,pre=el.dataset.prefix||'',suf=el.dataset.suffix||'';
-  let t0=null;const dur=1100;
-  const step=t=>{if(!t0)t0=t;const p=Math.min((t-t0)/dur,1);el.textContent=pre+Math.round(p*end)+suf;if(p<1)requestAnimationFrame(step);};
-  requestAnimationFrame(step);
-}),{threshold:.6});
-document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
-
-document.querySelectorAll('[data-appstore]').forEach(a=>a.addEventListener('click',e=>{const u=a.getAttribute('data-url');if(!u){e.preventDefault();}}));
+  const phone=document.getElementById('heroPhone');
+  const hero=phone.closest('.hero');
+  if(window.matchMedia('(pointer:fine)').matches){
+    hero.addEventListener('mousemove',(e)=>{
+      const r=hero.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      phone.style.transform=`rotate(-7deg) rotateY(${x*10}deg) rotateX(${-y*10}deg)`;
+    });
+    hero.addEventListener('mouseleave',()=>{ phone.style.transform=''; });
+  }
 </script>
 </body>
 </html>
